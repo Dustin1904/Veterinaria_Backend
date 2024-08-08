@@ -1,77 +1,63 @@
-// Importar el Schema y el modelo de mongoose
-import {Schema, model} from 'mongoose'
-// Importar bcrypt para cifrar las contraseñas
+import { Schema, model } from 'mongoose'
 import bcrypt from "bcryptjs"
 
-
-// Crear el Schema "atributos de la tabla de la BDD"
 const veterinarioSchema = new Schema({
-    nombre:{
-        type:String,
-        require:true,
-        trim:true
+    nombre: {
+        type: String,
+        require: true,
+        trim: true
     },
-    apellido:{
-        type:String,
-        require:true,
-        trim:true
+    apellido: {
+        type: String,
+        require: true,
+        trim: true
     },
-    direccion:{
-        type:String,
-        trim:true,
-        default:null
+    direccion: {
+        type: String,
+        trim: true,
+        default: null
     },
-    telefono:{
-        type:Number,
-        trim:true,
-        default:null
+    telefono: {
+        type: Number,
+        trim: true,
+        default: null
     },
-    email:{
-        type:String,
-        require:true,
-        trim:true,
-		unique:true
+    email: {
+        type: String,
+        require: true,
+        trim: true,
+		unique: true
     },
-    password:{
-        type:String,
-        require:true
+    password: {
+        type: String,
+        require: true
     },
-    status:{
-        type:Boolean,
-        default:true
+    status: {
+        type: Boolean,
+        default: true
     },
-    token:{
-        type:String,
-        default:null
+    token: {
+        type: String,
+        default: null
     },
-    confirmEmail:{
-        type:Boolean,
-        default:false
+    confirmEmail: {
+        type: Boolean,
+        default: false
     }
-
-},{
+}, {
     timestamps:true
 })
 
-// Método para cifrar el password del veterinario
-veterinarioSchema.methods.encrypPassword = async function(password){
-    const salt = await bcrypt.genSalt(10)
-    const passwordEncryp = await bcrypt.hash(password,salt)
-    return passwordEncryp
+veterinarioSchema.methods.encryptPassword = async (password) => {
+    return await bcrypt.hash(password, await bcrypt.genSalt(10));
 }
 
-// Método para verificar si el password ingresado es el mismo de la BDD
-veterinarioSchema.methods.matchPassword = async function(password){
-    const response = await bcrypt.compare(password,this.password)
-    return response
+veterinarioSchema.methods.matchPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
 }
 
-// Método para crear un token 
-veterinarioSchema.methods.crearToken = function(){
-    const tokenGenerado = this.token = Math.random().toString(36).slice(2)
-    return tokenGenerado
+veterinarioSchema.methods.crearToken = function() {
+    this.token = Math.random().toString(36).slice(2);
 }
 
-// Crear el Modelo Veterinario "Tabla BDD" en base al esquema llamado veterinarioSchema
-// Luego exportar el modelo
-export default model('Veterinario',veterinarioSchema)
+export default model('Veterinario', veterinarioSchema);

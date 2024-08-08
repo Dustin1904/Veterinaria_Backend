@@ -1,15 +1,11 @@
+import server from "./server.js";
+import connection from "./database.js";
+import mensajeria from "./config/mensajeria.js";
 
-import app from './server.js'
+connection();
 
+mensajeria();
 
-// Importar la función connection()
-import connection from './database.js';
-
-// Haicneod uso de la función connection()
-connection()
-
-
-app.listen(app.get('port'),()=>{
-    console.log(`Server ok on http://localhost:${app.get('port')}`);
-})
-
+server.listen(process.env.PORT || 3001, () =>
+	console.log(`Server is running on http://localhost:${process.env.PORT || 3001}`)
+);

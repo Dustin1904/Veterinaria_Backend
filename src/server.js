@@ -1,48 +1,29 @@
-// Requerir los módulos
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
+import routerVeterinario from "./routes/veterinario.routes.js";
+import routerPaciente from "./routes/paciente.routes.js";
+import routerTratamiento from "./routes/tratamiento.routes.js";
+import "dotenv/config";
+import morgan from "morgan";
+import { createServer } from "http";
 
-// Importar la variable routerVeterinarios
-import routerVeterinarios from './routers/veterinario_routes.js'
+const app = express();
+app.use(morgan("dev"));
 
-// Importar la variable routerPacientes
-import routerPacientes from './routers/paciente_routes.js'
+app.use(
+	cors({
+		origin: "*",
+	})
+);
+app.use(express.json());
 
+app.get("/", (_, res) => res.send("Server on"));
 
-// Importar la variable routerPacientes
-import routerTratamientos from './routers/tratameinto_routes.js'
+app.use("/api", routerVeterinario);
+app.use("/api", routerPaciente);
+app.use("/api", routerTratamiento);
+app.use((_, res) => res.status(404).json({ res: "404 - Endpoint not found" }));
 
+const server = createServer(app);
 
-
-
-// Inicializaciones
-const app = express()
-dotenv.config()
-
-// Configuraciones 
-app.set('port',process.env.port || 3000)
-app.use(cors())
-
-// Middlewares 
-app.use(express.json())
-
-
-// Variables globales
-
-
-
-// Rutas 
-app.use('/api',routerVeterinarios)
-app.use('/api',routerPacientes)
-app.use('/api',routerTratamientos)
-
-
-
-// Manejo de una ruta que no sea encontrada
-app.use((req,res)=>res.status(404).send("Endpoint no encontrado - 404"))
-
-
-
-// Exportar la instancia de express por medio de app
-export default  app
+export default server;

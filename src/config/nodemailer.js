@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer"
-import dotenv from 'dotenv'
-dotenv.config()
-
+import 'dotenv/config'
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -13,16 +11,13 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-
-const sendMailToUser = (userMail, token) => {
-
+const sendMailToUser = ( userMail, token ) => {
     let mailOptions = {
         from: process.env.USER_MAILTRAP,
         to: userMail,
-        subject: "Verifica tu cuenta",
-        html: `<p>Hola, haz clic <a href="${process.env.URL_FRONTEND}confirmar/${encodeURIComponent(token)}">aquí</a> para confirmar tu cuenta.</p>`
+        subject: "Verifica tu cuenta - VET-ESFOT 🐶 😺",
+        html: `<p>Hola, haz clic <a href="${ process.env.URL_FRONTEND }confirmar/${encodeURIComponent(token)}">aquí</a> para confirmar tu cuenta.</p>`
     };
-    
 
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
@@ -33,46 +28,36 @@ const sendMailToUser = (userMail, token) => {
     });
 };
 
-
-// send mail with defined transport object
-const sendMailToRecoveryPassword = async(userMail,token)=>{
+const sendMailToRecoveryPassword = async (userMail, token)=>{
     let info = await transporter.sendMail({
-    from: 'admin@vet.com',
-    to: userMail,
-    subject: "Correo para reestablecer tu contraseña",
-    html: `
-    <h1>Sistema de gestión (VET-ESFOT 🐶 😺)</h1>
-    <hr>
-    <a href=${process.env.URL_FRONTEND}recuperar-password/${token}>Clic para reestablecer tu contraseña</a>
-    <hr>
-    <footer>Grandote te da la Bienvenida!</footer>
-    `
+        from: 'admin@vet.com',
+        to: userMail,
+        subject: "Correo para reestablecer tu contraseña - VET-ESFOT 🐶 😺",
+        html: `<h1>Sistema de gestión (VET-ESFOT 🐶 😺)</h1>
+        <hr>
+        <a href=${ process.env.URL_FRONTEND }recuperar-password/${ token }>Clic para reestablecer tu contraseña</a>
+        <hr>
+        <footer>Grandote te da la Bienvenida!</footer>
+        `
     });
     console.log("Mensaje enviado satisfactoriamente: ", info.messageId);
 }
 
-
-
-
-// send mail to patient
-const sendMailToPaciente = async(userMail,password)=>{
+const sendMailToPaciente = async (userMail, password) => {
     let info = await transporter.sendMail({
-    from: 'admin@vet.com',
-    to: userMail,
-    subject: "Correo de bienvenida",
-    html: `
-    <h1>Sistema de gestión (VET-ESFOT 🐶 😺)</h1>
-    <hr>
-    <p>Contraseña de acceso: ${password}</p>
-    <a href=${process.env.URL_BACKEND}paciente/login>Clic para iniciar sesión</a>
-    <hr>
-    <footer>Grandote te da la Bienvenida!</footer>
+        from: 'admin@vet.com',
+        to: userMail,
+        subject: "Correo de bienvenida a VET-ESFOT 🐶 😺",
+        html: `<h1>Sistema de gestión (VET-ESFOT 🐶 😺)</h1>
+        <hr>
+        <p>Contraseña de acceso: ${ password }</p>
+        <a href=${ process.env.URL_FRONTEND }paciente/login>Clic para iniciar sesión</a>
+        <hr>
+        <footer>Grandote te da la Bienvenida!</footer>
     `
     });
     console.log("Mensaje enviado satisfactoriamente: ", info.messageId);
 }
-
-
 
 export {
     sendMailToUser,
@@ -80,4 +65,4 @@ export {
     sendMailToPaciente
 }
 
-
+export default sendMailToUser
