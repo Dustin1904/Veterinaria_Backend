@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { sendMailToUser, sendMailToRecoveryPassword } from "../config/nodemailer.js"
 import generarToken from "../helpers/crearJWT.js"
-import Veterinario from "../models/veterinario.js"
+import Veterinario from "../models/veterinarioM.js"
 
 
 const registro = async (req, res) => {
